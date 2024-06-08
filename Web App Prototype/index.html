@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header> <!--create the header of the page. this will hold the name of site, search bar and add exercise button. these are the main and most important features of the site and therefore are place at the very top of the page for clear visual heirarchy.-->
+        <h1>Lifit</h1> <!--name of application in header-->
+        <form action="/search" method="GET"> <!--creates a search form using the http get method -->
+            <input type="text" name="query" placeholder="Search">  <!-- the type specifies text. this means that the user will input text to create a form value. "Search" is in the search box when there is no text. this is generally accepted UI for search bars and is univerally understood-->
+            <button type="submit">Search</button>  <!-- this creates a button that the user can press to submit thier search. the text "search" has been labeled to the created button as another unerviassly acccepted UI feature-->
+        </form>
+        <button id="addExerciseButton" onclick="toggleDropdown()">+ Add Exercise</button> <!-- this button is for the user to add an exercise. id reference for css. Java script is used to add dynamic response to thebutton when the button is clicked (see additional information under script tag section in html file below)-->
+    </header>
+    
+    <div id="dropdownForm" class="dropdown-content">  <!--div container created. id created for reference css. class associated for styling-->
+        <form id="exerciseForm"><!--form for user input. id of user input created for css reference-->
+            <label for="title">Exercise Name:</label> <!--this label is created as a title for the input, as if a categoriser indicating to the user what should be input in this area. for indicated what it is associated with-->
+            <input type="text" id="title" name="title" required> <!-- refer to the id created title. this section requires a text input and must have text to submit. This is because there must be a title for the exercise.-->
+            
+            <label for="category">Category:</label> <!-- creates a descriptive label for the input field. id created for this category name of the category to tell the user what is needed tobe submitted.-->
+            <select id="category" name="category" required><!-- select for a dropdown menu, unique id category created. provides namepof selected category and its value is selected form the options. must be selceted to submit form/add exercise-->
+                <option value="upper_body">Upper Body</option> <!--multiple options inside the select element. each option is a category users can select. value is for which section of the page the inputs are submitted too. Labels for each exercise type-->
+                <option value="lower_body">Lower Body</option> <!--see above-->
+                <option value="cardio">Cardio</option> <!--see above-->
+                <option value="other">Other</option> <!--see above-->
+            </select>
+        
+            <label for="sets">Sets:</label> <!--creates alabel for the form input. matches the id and the label. has the visible text for context for the user to know what information is to be inputted in this section-->
+            <input type="number" id="sets" name="sets" min="1" required> <!-- this is where the user submits data. the only type of data accepted is defined as numerical in the type section. name is forlater form data reference and the minimum is 1 as doing zero sets is not doing the exercise at all --> 
+            <label for="repetitions">Repetitions:</label><!--creates a label for the form input.connects the label to the id-->
+            <input type="number" id="repetitions" name="repetitions" min="1" required> <!--this is where the user submits data. the only type of data accepted is defined as numerical in the type section. name is forlater form data reference and the minimum is 1 as doing zero repetitions is not doing the exercise at all. must be input to submit the form-->
+            <label for="date">Date:</label> <!--creates a label for the form input.connects the label to the id-->
+            <input type="date" id="date" name="date" required> 
+            <label for="weight">Weight:</label><!--creates a label for the form input.connect the label to the id-->
+            <input type="text" id="weight" name="weight"> <!--the type of input is text so that metric system can be specified. its nor arequired field as some exercises do not use weight.-->
+            
+            <label for="image">Upload Image:</label><!--creates a label for the form input-->
+            <input type="file" id="image" name="image"> <!--the type of input is a file uploaded. identifier created. not required to input image to submit form-->
+            
+            <button type="submit">Add Exercise</button> <!--creates a clickable button. submits the form data. Says "add exercise" on the button to specify to user its feature. no + this time to differnciate and not confuse the user int restarting the submission-->
+        </form>
+    </div>
+
+    <!--creating sections on page for stand alone data--> <section 
+    id="upper_body"> <!-- create identifier-->
+        <h2>Upper Body</h2> <!--creates the visible lable for this section on the screen-->
+        <div class="exercise-list"></div> <!--create container-->
+    </section>
+        <!--creating sections on page for stand alone data--><section 
+    id="lower_body"><!-- create identifier-->
+        <h2>Lower Body</h2><!--creates the visible lable for this section on the screen-->
+        <div class="exercise-list"></div><!--create container-->
+    </section>
+    <!--creating sections on page for stand alone data--><section 
+    id="cardio"><!-- create identifier-->
+        <h2>Cardio</h2><!--creates the visible lable for this section on the screen-->
+        <div class="exercise-list"></div><!--create container-->
+    </section>
+   <!--creating sections on page for stand alone data--> <section 
+    id="other"><!-- create identifier-->
+        <h2>Other</h2><!--creates the visible lable for this section on the screen-->
+        <div class="exercise-list"></div><!--create container-->
+    </section>
+
+    <footer> <!--in the footer so itis away from all other buttons so it is less likely to be accidentally pressed by user-->
+        <button id="deleteAllButton">Delete All Exercises</button> <!--creates as button with the text. delete all exercises so it is clear to user the action of this button.-->
+    </footer>
+
+    <!--the following is the integrated javascript to make the site more dynamic and responsive with dropdown menus and active buttons -->
+    <script>
+        function toggleDropdown() { //defining the function. below is run when this function is called above in the created html button
+            var dropdown = document.getElementById("dropdownForm");//selecting the dropdownFrom from html id created id="dropdownForm" class="dropdown-content" and creates new name to hold the information" dropdown.
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block"; //css display and change to style of html. block to take up width of the page. none is when it take up no space "folded" this creates conditions and displays the dropdown based on what is displayed.true or false to return none or block. toggles between each so that they go back and forth. if its not none it has to be block and if its not block it has to be none= if its not already open it must be trying to open it.
+        }
+
+        document.getElementById("exerciseForm").addEventListener("submit", function(event) { //selects the exerciseForm element from the ID created in above html.create an event listener that runs when the form is submitted
+            event.preventDefault();//prevents the page from reloading when the form data in input and submitted and instead send it to this javascript tobe unpacked and resubmitted rather than having the code run above.
+            const title = document.getElementById("title").value; //this picks the exercise name out from the id created in above html. stores the title in the title category.
+            const category = document.getElementById("category").value;//this picks the category of exercise out from the id created in above html. stores the category that the user selected in the categrory cateogry
+            const sets = document.getElementById("sets").value;// this picks the number of sets outfrom the id created in above html. stores the number value under the sets variable
+            const repetitions = document.getElementById("repetitions").value;//this picks the repitiions out from the id created in above html. stores the number value selected under the repetitions variable
+            const weight = document.getElementById("weight").value; //this selcts the wieght input from the id created in above html. stores the value for the weights in the wieghts variable.
+            const imageInput = document.getElementById("image");//this selects the input of the image from the id created in above html. gets the file inputted for the image.
+            const date = document.getElementById("date").value;//selects the date
+            const image = imageInput.files.length > 0 ? URL.createObjectURL(imageInput.files[0]) : ''; //>0 checks if there is a file. if it is zero there is no file if it detects someting there is a file. creates a link for the file so it can be used on the site without rerequesting it from the users device. ? for if there is a like. if there isnt a link then there wasnt an image so dont search for input.
+
+            // Creating a new exercise element 
+            const exerciseElement = document.createElement("div"); //refers to the html above and creates the new html element div to be created. declares the variable to new div.
+            exerciseElement.className = "exercise-item";//set the class for the div from above. assigns for the css too
+            /* this allows the html in the div to be defined */ 
+            
+
+            exerciseElement.innerHTML = ` 
+            <div class="exercise-header">
+                    <h3>${title}</h3>
+                    <button class="delete-exercise" onclick="deleteExercise(this)">X</button>
+                </div>
+                <h3>${title}</h3> 
+                <p>Sets: ${sets}</p>
+                <p>Repetitions: ${repetitions}</p>
+                <p>Weight: ${weight}</p>
+                ${image ? `<img src="${image}" alt="${title}" />` : ''}
+            `; //these are multi line strings. there is embedded expresions that are inserted into the string. heading bold font for title using html command.paragraph elements for the other added elements in the exercise. checks if an image is uploaded or just an empty string. if there is an image then img tag if not then none.
+
+           
+            document.querySelector(`#${category} .exercise-list`).appendChild(exerciseElement); //this is to make sure that the exercise is submitted to the right category that was selected in the form.
+
+        
+            document.getElementById("exerciseForm").reset(); //selects the part of the html. clears all inputs that have been netered nad returnt eh site to the default.
+        });
+        function deleteExercise(button) {
+            button.parentElement.parentElement.remove();
+        }
+        document.getElementById("deleteAllButton").addEventListener("click", function() { //refers to the html part. returns the html for the delete button.
+           
+            const exerciseLists = document.querySelectorAll(".exercise-list"); //finds all the html elements in the class exercise list of each individual exercise and makes a node list
+
+           
+            exerciseLists.forEach(list => list.innerHTML = ''); //goes over each element on the exercise lists form the created node list and makes it an empty string instead whcih deletes all the child elements.
+        });
+
+    </script>
+</body>
+</html>
